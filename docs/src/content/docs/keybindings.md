@@ -35,6 +35,10 @@ Keybindings for task report:
 
     K: {selected-=pageheight}            - Move page up in task report
 
+    (unbound): {selected+=pageheight/2}  - Move half page down in task report (configure via uda.taskwarrior-tui.keyconfig.half-page-down)
+
+    (unbound): {selected-=pageheight/2}  - Move half page up in task report (configure via uda.taskwarrior-tui.keyconfig.half-page-up)
+
     g: {selected=first}                  - Go to top
 
     G: {selected=last}                   - Go to bottom

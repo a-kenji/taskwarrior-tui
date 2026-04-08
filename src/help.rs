@@ -35,6 +35,8 @@ fn keycode_for(name: &str, kc: &KeyConfig) -> KeyCode {
     "up" => kc.up,
     "page_down" => kc.page_down,
     "page_up" => kc.page_up,
+    "half_page_down" => kc.half_page_down.unwrap_or(KeyCode::Null),
+    "half_page_up" => kc.half_page_up.unwrap_or(KeyCode::Null),
     "go_to_top" => kc.go_to_top,
     "go_to_bottom" => kc.go_to_bottom,
     "log" => kc.log,
@@ -87,7 +89,30 @@ fn render_help(kc: &KeyConfig, tmpl: &str) -> String {
     break;
   }
   out.push_str(&tmpl[i..]);
-  out
+  // Remove lines where an optional keybinding was unbound (token replaced with
+  // nothing, leaving a line that starts with whitespace then ':'), then collapse
+  // any resulting runs of consecutive blank lines down to a single blank line.
+  let filtered: Vec<&str> = out
+    .lines()
+    .filter(|line| {
+      let trimmed = line.trim_start();
+      !trimmed.starts_with(": ")
+    })
+    .collect();
+  let mut result = String::with_capacity(out.len());
+  let mut prev_blank = false;
+  for line in filtered {
+    let blank = line.trim().is_empty();
+    if blank && prev_blank {
+      continue;
+    }
+    if !result.is_empty() {
+      result.push('\n');
+    }
+    result.push_str(line);
+    prev_blank = blank;
+  }
+  result
 }
 
 impl Help {

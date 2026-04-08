@@ -16,6 +16,9 @@ uda.taskwarrior-tui.keyconfig.down=j
 uda.taskwarrior-tui.keyconfig.up=k
 uda.taskwarrior-tui.keyconfig.page-down=J
 uda.taskwarrior-tui.keyconfig.page-up=K
+# Half-page scroll (unbound by default, set to any single character to enable)
+# uda.taskwarrior-tui.keyconfig.half-page-down=
+# uda.taskwarrior-tui.keyconfig.half-page-up=
 uda.taskwarrior-tui.keyconfig.delete=x
 uda.taskwarrior-tui.keyconfig.done=d
 uda.taskwarrior-tui.keyconfig.start-stop=s

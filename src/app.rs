@@ -2116,6 +2116,48 @@ impl TaskwarriorTui {
     self.current_selection_uuid = None;
   }
 
+  pub fn task_report_next_half_page(&mut self) {
+    if self.tasks.is_empty() {
+      return;
+    }
+    let half = (self.task_report_height as usize).saturating_add(1) / 2;
+    let i = {
+      if self.current_selection == self.tasks.len() - 1 {
+        if self.config.uda_task_report_looping {
+          0
+        } else {
+          self.tasks.len() - 1
+        }
+      } else {
+        std::cmp::min(self.current_selection.saturating_add(half), self.tasks.len() - 1)
+      }
+    };
+    self.current_selection = i;
+    self.current_selection_id = None;
+    self.current_selection_uuid = None;
+  }
+
+  pub fn task_report_previous_half_page(&mut self) {
+    if self.tasks.is_empty() {
+      return;
+    }
+    let half = (self.task_report_height as usize).saturating_add(1) / 2;
+    let i = {
+      if self.current_selection == 0 {
+        if self.config.uda_task_report_looping {
+          self.tasks.len() - 1
+        } else {
+          0
+        }
+      } else {
+        self.current_selection.saturating_sub(half)
+      }
+    };
+    self.current_selection = i;
+    self.current_selection_id = None;
+    self.current_selection_uuid = None;
+  }
+
   pub fn task_report_jump(&mut self) -> Result<()> {
     if self.tasks.is_empty() {
       return Ok(());
@@ -3084,6 +3126,10 @@ impl TaskwarriorTui {
           self.task_report_previous_page();
         } else if input == KeyCode::PageDown || input == self.keyconfig.page_down {
           self.calendar_year += 10;
+        } else if self.keyconfig.half_page_down.map_or(false, |k| input == k) {
+          self.task_report_next_half_page();
+        } else if self.keyconfig.half_page_up.map_or(false, |k| input == k) {
+          self.task_report_previous_half_page();
         } else if input == KeyCode::Ctrl('e') {
           self.task_details_scroll_down();
         } else if input == KeyCode::Ctrl('y') {
@@ -3141,6 +3187,10 @@ impl TaskwarriorTui {
             self.task_report_next_page();
           } else if input == KeyCode::PageUp || input == self.keyconfig.page_up {
             self.task_report_previous_page();
+          } else if self.keyconfig.half_page_down.map_or(false, |k| input == k) {
+            self.task_report_next_half_page();
+          } else if self.keyconfig.half_page_up.map_or(false, |k| input == k) {
+            self.task_report_previous_half_page();
           } else if input == KeyCode::Ctrl('e') {
             self.task_details_scroll_down();
           } else if input == KeyCode::Ctrl('y') {

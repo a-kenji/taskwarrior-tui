@@ -16,6 +16,8 @@ pub struct KeyConfig {
   pub up: KeyCode,
   pub page_down: KeyCode,
   pub page_up: KeyCode,
+  pub half_page_down: Option<KeyCode>,
+  pub half_page_up: Option<KeyCode>,
   pub delete: KeyCode,
   pub done: KeyCode,
   pub start_stop: KeyCode,
@@ -65,6 +67,8 @@ impl Default for KeyConfig {
       up: KeyCode::Char('k'),
       page_down: KeyCode::Char('J'),
       page_up: KeyCode::Char('K'),
+      half_page_down: None,
+      half_page_up: None,
       delete: KeyCode::Char('x'),
       done: KeyCode::Char('d'),
       start_stop: KeyCode::Char('s'),
@@ -121,6 +125,8 @@ impl KeyConfig {
     let up = Self::get_config("uda.taskwarrior-tui.keyconfig.up", data);
     let page_down = Self::get_config("uda.taskwarrior-tui.keyconfig.page-down", data);
     let page_up = Self::get_config("uda.taskwarrior-tui.keyconfig.page-up", data);
+    let half_page_down = Self::get_config("uda.taskwarrior-tui.keyconfig.half-page-down", data);
+    let half_page_up = Self::get_config("uda.taskwarrior-tui.keyconfig.half-page-up", data);
     let delete = Self::get_config("uda.taskwarrior-tui.keyconfig.delete", data);
     let done = Self::get_config("uda.taskwarrior-tui.keyconfig.done", data);
     let start_stop = Self::get_config("uda.taskwarrior-tui.keyconfig.start-stop", data);
@@ -161,6 +167,8 @@ impl KeyConfig {
     self.up = up.unwrap_or(self.up);
     self.page_down = page_down.unwrap_or(self.page_down);
     self.page_up = page_up.unwrap_or(self.page_up);
+    self.half_page_down = half_page_down.or(self.half_page_down);
+    self.half_page_up = half_page_up.or(self.half_page_up);
     self.delete = delete.unwrap_or(self.delete);
     self.done = done.unwrap_or(self.done);
     self.start_stop = start_stop.unwrap_or(self.start_stop);
